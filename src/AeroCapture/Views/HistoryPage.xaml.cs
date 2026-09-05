@@ -19,9 +19,12 @@ public sealed partial class HistoryPage : Page
         ViewModel.RefreshCommand.Execute(null);
     }
 
-    private void OnTabSelectionChanged(TabView sender, TabViewSelectionChangedEventArgs args)
+    private void OnTabSelectionChanged(object sender, SelectionChangedEventArgs args)
     {
-        ViewModel.SelectedTab = sender.SelectedIndex;
+        if (sender is TabView tabView)
+        {
+            ViewModel.SelectedTab = tabView.SelectedIndex;
+        }
     }
 
     private void OnOpenRecordingClicked(object sender, RoutedEventArgs e)

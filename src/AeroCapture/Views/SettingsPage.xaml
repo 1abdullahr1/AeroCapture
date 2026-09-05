@@ -145,27 +145,27 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Capture Region Screenshot" VerticalAlignment="Center" />
-                        <Border Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                        <Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4">
                             <TextBlock Text="PrintScreen" FontWeight="SemiBold" />
                         </Border>
 
                         <TextBlock Grid.Row="1" Text="Capture Full Screen Screenshot" VerticalAlignment="Center" />
-                        <Border Grid.Row="1" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                        <Border Grid.Row="1" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4">
                             <TextBlock Text="Ctrl + PrintScreen" FontWeight="SemiBold" />
                         </Border>
 
                         <TextBlock Grid.Row="2" Text="Capture Active Window Screenshot" VerticalAlignment="Center" />
-                        <Border Grid.Row="2" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                        <Border Grid.Row="2" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4">
                             <TextBlock Text="Alt + PrintScreen" FontWeight="SemiBold" />
                         </Border>
 
                         <TextBlock Grid.Row="3" Text="Start / Stop Screen Recording" VerticalAlignment="Center" />
-                        <Border Grid.Row="3" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                        <Border Grid.Row="3" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4">
                             <TextBlock Text="Ctrl + Shift + R" FontWeight="SemiBold" />
                         </Border>
 
                         <TextBlock Grid.Row="4" Text="Pause / Resume Screen Recording" VerticalAlignment="Center" />
-                        <Border Grid.Row="4" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                        <Border Grid.Row="4" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="4" Padding="8,4">
                             <TextBlock Text="Ctrl + Shift + P" FontWeight="SemiBold" />
                         </Border>
                     </Grid>

@@ -24,7 +24,7 @@
                 <!-- Hardware Acceleration Badge -->
                 <Border Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="12,8" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <FontIcon Glyph="&#xE945;" Foreground="{ThemeResource SystemAccentColor}" />
+                        <FontIcon Glyph="&#xE945;" Foreground="{ThemeResource AccentFillColorDefaultBrush}" />
                         <TextBlock x:Name="EncoderBadgeText" Text="Detecting Hardware Encoder..." FontWeight="SemiBold" VerticalAlignment="Center" />
                     </StackPanel>
                 </Border>
@@ -44,7 +44,7 @@
                     <!-- Full Screen Record -->
                     <Button Grid.Column="0" Height="140" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="20" CornerRadius="8" Click="OnRecordFullscreenClicked">
                         <StackPanel Spacing="10">
-                            <FontIcon Glyph="&#xE7F4;" FontSize="28" Foreground="{ThemeResource SystemAccentColor}" HorizontalAlignment="Left" />
+                            <FontIcon Glyph="&#xE7F4;" FontSize="28" Foreground="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" />
                             <TextBlock Text="Full Screen" Style="{ThemeResource BodyStrongTextBlockStyle}" FontSize="16" />
                             <TextBlock Text="Record all monitors or primary display" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
                         </StackPanel>
@@ -53,7 +53,7 @@
                     <!-- Selected Region Record -->
                     <Button Grid.Column="1" Height="140" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="20" CornerRadius="8" Click="OnRecordRegionClicked">
                         <StackPanel Spacing="10">
-                            <FontIcon Glyph="&#xE759;" FontSize="28" Foreground="{ThemeResource SystemAccentColor}" HorizontalAlignment="Left" />
+                            <FontIcon Glyph="&#xE759;" FontSize="28" Foreground="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" />
                             <TextBlock Text="Selected Region" Style="{ThemeResource BodyStrongTextBlockStyle}" FontSize="16" />
                             <TextBlock Text="Drag and select a precise custom area" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
                         </StackPanel>
@@ -62,7 +62,7 @@
                     <!-- Window Record -->
                     <Button Grid.Column="2" Height="140" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="20" CornerRadius="8" Click="OnRecordWindowClicked">
                         <StackPanel Spacing="10">
-                            <FontIcon Glyph="&#xE7C4;" FontSize="28" Foreground="{ThemeResource SystemAccentColor}" HorizontalAlignment="Left" />
+                            <FontIcon Glyph="&#xE7C4;" FontSize="28" Foreground="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" />
                             <TextBlock Text="Window / App" Style="{ThemeResource BodyStrongTextBlockStyle}" FontSize="16" />
                             <TextBlock Text="Record a specific application window" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
                         </StackPanel>
@@ -83,7 +83,7 @@
                     <!-- Full Screen Screenshot -->
                     <Button Grid.Column="0" Height="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="20" CornerRadius="8" Click="OnScreenshotFullscreenClicked">
                         <StackPanel Spacing="8">
-                            <FontIcon Glyph="&#xE722;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}" HorizontalAlignment="Left" />
+                            <FontIcon Glyph="&#xE722;" FontSize="24" Foreground="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" />
                             <TextBlock Text="Capture Full Screen" Style="{ThemeResource BodyStrongTextBlockStyle}" />
                             <TextBlock Text="Instant snapshot of entire screen (Ctrl + PrtScn)" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                         </StackPanel>
@@ -92,7 +92,7 @@
                     <!-- Selected Region Screenshot -->
                     <Button Grid.Column="1" Height="120" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="20" CornerRadius="8" Click="OnScreenshotRegionClicked">
                         <StackPanel Spacing="8">
-                            <FontIcon Glyph="&#xEE71;" FontSize="24" Foreground="{ThemeResource SystemAccentColor}" HorizontalAlignment="Left" />
+                            <FontIcon Glyph="&#xEE71;" FontSize="24" Foreground="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" />
                             <TextBlock Text="Capture Region &amp; Annotate" Style="{ThemeResource BodyStrongTextBlockStyle}" />
                             <TextBlock Text="Snipping tool with modern annotation studio (PrtScn)" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                         </StackPanel>
@@ -114,13 +114,13 @@
                         <!-- System Audio Loopback Toggle -->
                         <StackPanel Grid.Column="0" Spacing="8">
                             <ToggleSwitch x:Name="SystemAudioSwitch" Header="System Audio (Speakers/Headphones)" IsOn="True" Toggled="OnSystemAudioToggled" />
-                            <ProgressBar x:Name="SystemAudioMeter" Height="4" Maximum="1.0" Value="0" Foreground="{ThemeResource SystemAccentColor}" />
+                            <ProgressBar x:Name="SystemAudioMeter" Height="4" Maximum="1.0" Value="0" Foreground="{ThemeResource AccentFillColorDefaultBrush}" />
                         </StackPanel>
 
                         <!-- Microphone Toggle -->
                         <StackPanel Grid.Column="1" Spacing="8">
                             <ToggleSwitch x:Name="MicAudioSwitch" Header="Microphone Input" IsOn="False" Toggled="OnMicAudioToggled" />
-                            <ProgressBar x:Name="MicAudioMeter" Height="4" Maximum="1.0" Value="0" Foreground="{ThemeResource SystemAccentColor}" />
+                            <ProgressBar x:Name="MicAudioMeter" Height="4" Maximum="1.0" Value="0" Foreground="{ThemeResource AccentFillColorDefaultBrush}" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>
