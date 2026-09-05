@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using AeroCapture.Core.Capture;
 using AeroCapture.Core.Encoding;
