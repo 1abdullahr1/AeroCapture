@@ -23,7 +23,7 @@
 
             <NavigationView.PaneFooter>
                 <StackPanel Margin="10,0,10,12" Spacing="4">
-                    <TextBlock Text="v1.0.0" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" />
+                    <TextBlock Text="v1.0.2" FontSize="11" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" />
                 </StackPanel>
             </NavigationView.PaneFooter>
 

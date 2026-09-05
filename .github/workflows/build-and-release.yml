@@ -107,23 +107,18 @@ jobs:
               Copy-Item $ffmpegExe.FullName -Destination "$appDir\ffmpeg\ffmpeg.exe" -Force
           }
 
-          # 2. Ensure resources.pri is present
-          Write-Host "Checking PRI files in $appDir..."
-          if (-not (Test-Path "$appDir\resources.pri")) {
-              Write-Host "resources.pri not found in dist\app! Searching project outputs..."
-              $priFiles = Get-ChildItem -Path "src\AeroCapture\bin" -Filter "*AeroCapture.pri" -Recurse
-              if (-not $priFiles) {
-                  $priFiles = Get-ChildItem -Path "src\AeroCapture" -Filter "*.pri" -Recurse
-              }
-
-              foreach ($p in $priFiles) {
-                  Write-Host "Found PRI: $($p.FullName)"
-                  if ($p.Name -like "*AeroCapture.pri") {
-                      Copy-Item $p.FullName -Destination "$appDir\resources.pri" -Force
-                      Copy-Item $p.FullName -Destination "$appDir\AeroCapture.pri" -Force
-                      Write-Host "Successfully copied $($p.Name) as resources.pri and AeroCapture.pri!"
-                  }
-              }
+          # 2. Ensure resources.pri and AeroCapture.pri are present
+          Write-Host "Ensuring PRI files in $appDir..."
+          Get-ChildItem -Path "src\AeroCapture\bin" -Filter "*.pri" -Recurse | ForEach-Object {
+              Write-Host "Copying $($_.FullName) to $appDir\$($_.Name)"
+              Copy-Item $_.FullName -Destination "$appDir\$($_.Name)" -Force
+          }
+          if (Test-Path "$appDir\resources.pri" -and -not (Test-Path "$appDir\AeroCapture.pri")) {
+              Copy-Item "$appDir\resources.pri" -Destination "$appDir\AeroCapture.pri" -Force
+              Write-Host "Created AeroCapture.pri from resources.pri"
+          } elseif (Test-Path "$appDir\AeroCapture.pri" -and -not (Test-Path "$appDir\resources.pri")) {
+              Copy-Item "$appDir\AeroCapture.pri" -Destination "$appDir\resources.pri" -Force
+              Write-Host "Created resources.pri from AeroCapture.pri"
           }
 
           # Verify all PRI files in dist\app

@@ -9,7 +9,23 @@ public partial class App : Application
 
     public App()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                string logPath = System.IO.Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+                    "AeroCapture_crash.log");
+                System.IO.File.AppendAllText(logPath, $"[{DateTime.Now}] InitializeComponent Exception: {ex.Message}\n{ex}\n\n");
+                MessageBox(IntPtr.Zero, $"AeroCapture UI initialization error:\n{ex.Message}\n\nLog: {logPath}", "AeroCapture Error", 0x10);
+            }
+            catch { }
+            throw;
+        }
 
         UnhandledException += (s, e) =>
         {

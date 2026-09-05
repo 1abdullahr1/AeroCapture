@@ -16,17 +16,19 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.2</Version>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
     <ProductName>AeroCapture</ProductName>
     <Company>AeroCapture</Company>
     <Description>Windows-Native Screen Recording and Screenshot Studio</Description>
   </PropertyGroup>
 
   <Target Name="CopyPriToPublish" AfterTargets="Publish">
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pri" DestinationFiles="$(PublishDir)resources.pri" Condition="Exists('$(TargetDir)$(TargetName).pri')" />
+    <Copy SourceFiles="$(TargetDir)resources.pri" DestinationFiles="$(PublishDir)resources.pri" Condition="Exists('$(TargetDir)resources.pri')" />
+    <Copy SourceFiles="$(TargetDir)resources.pri" DestinationFiles="$(PublishDir)$(TargetName).pri" Condition="Exists('$(TargetDir)resources.pri')" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pri" DestinationFiles="$(PublishDir)$(TargetName).pri" Condition="Exists('$(TargetDir)$(TargetName).pri')" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pri" DestinationFiles="$(PublishDir)resources.pri" Condition="Exists('$(TargetDir)$(TargetName).pri')" />
   </Target>
 
   <ItemGroup>
