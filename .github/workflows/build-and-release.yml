@@ -27,6 +27,9 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Install Inno Setup
         run: |
           choco install innosetup -y --no-progress
@@ -77,13 +80,18 @@ jobs:
       - name: Publish WinUI 3 Unpackaged Application (Self-Contained x64)
         shell: pwsh
         run: |
-          dotnet publish src/AeroCapture/AeroCapture.csproj `
-            -c Release `
-            -r win-x64 `
-            --self-contained true `
-            -p:WindowsPackageType=None `
-            -p:PublishReadyToRun=false `
-            -o dist/app
+          $repoRoot = (Get-Item .).FullName
+          $publishDir = Join-Path $repoRoot "dist\app"
+
+          msbuild src/AeroCapture/AeroCapture.csproj `
+            /restore `
+            /t:Publish `
+            /p:Configuration=Release `
+            /p:Platform=x64 `
+            /p:RuntimeIdentifier=win-x64 `
+            /p:SelfContained=true `
+            /p:WindowsPackageType=None `
+            /p:PublishDir="$publishDir\"
 
       - name: Verify FFmpeg in Output Directory
         shell: pwsh
