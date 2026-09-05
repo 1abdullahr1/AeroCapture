@@ -93,16 +93,42 @@ jobs:
             /p:WindowsPackageType=None `
             /p:PublishDir="$publishDir\"
 
-      - name: Verify FFmpeg in Output Directory
+      - name: Verify Bundle Resources, PRI Files, and FFmpeg
         shell: pwsh
         run: |
-          if (-not (Test-Path "dist\app\ffmpeg\ffmpeg.exe")) {
-              Write-Host "Re-ensuring FFmpeg in published bundle..."
-              New-Item -ItemType Directory -Force -Path "dist\app\ffmpeg" | Out-Null
+          $repoRoot = (Get-Item .).FullName
+          $appDir = Join-Path $repoRoot "dist\app"
+
+          # 1. Ensure FFmpeg is present
+          if (-not (Test-Path "$appDir\ffmpeg\ffmpeg.exe")) {
+              Write-Host "Copying FFmpeg to bundle..."
+              New-Item -ItemType Directory -Force -Path "$appDir\ffmpeg" | Out-Null
               $ffmpegExe = Get-ChildItem -Path "temp_ffmpeg\extracted" -Filter "ffmpeg.exe" -Recurse | Select-Object -First 1
-              Copy-Item $ffmpegExe.FullName -Destination "dist\app\ffmpeg\ffmpeg.exe" -Force
+              Copy-Item $ffmpegExe.FullName -Destination "$appDir\ffmpeg\ffmpeg.exe" -Force
           }
-          Write-Host "Bundle contents verified."
+
+          # 2. Ensure resources.pri is present
+          Write-Host "Checking PRI files in $appDir..."
+          if (-not (Test-Path "$appDir\resources.pri")) {
+              Write-Host "resources.pri not found in dist\app! Searching project outputs..."
+              $priFiles = Get-ChildItem -Path "src\AeroCapture\bin" -Filter "*AeroCapture.pri" -Recurse
+              if (-not $priFiles) {
+                  $priFiles = Get-ChildItem -Path "src\AeroCapture" -Filter "*.pri" -Recurse
+              }
+
+              foreach ($p in $priFiles) {
+                  Write-Host "Found PRI: $($p.FullName)"
+                  if ($p.Name -like "*AeroCapture.pri") {
+                      Copy-Item $p.FullName -Destination "$appDir\resources.pri" -Force
+                      Copy-Item $p.FullName -Destination "$appDir\AeroCapture.pri" -Force
+                      Write-Host "Successfully copied $($p.Name) as resources.pri and AeroCapture.pri!"
+                  }
+              }
+          }
+
+          # Verify all PRI files in dist\app
+          Write-Host "Final list of PRI files in output bundle:"
+          Get-ChildItem -Path $appDir -Filter "*.pri" | Format-Table Name, Length, LastWriteTime
 
       - name: Compile Inno Setup Windows Installer
         shell: pwsh
