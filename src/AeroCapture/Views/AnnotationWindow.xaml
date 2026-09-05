@@ -1,0 +1,101 @@
+<Window
+    x:Class="AeroCapture.Views.AnnotationWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="AeroCapture - Screenshot Annotation Studio">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Top Tool Ribbon -->
+        <Border Grid.Row="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Annotation Tools -->
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <RadioButtons x:Name="ToolRadioGroup" SelectionChanged="OnToolChanged">
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <RadioButton Content="✏️ Pen" Tag="Pen" />
+                            <RadioButton Content="🖊️ Highlighter" Tag="Highlighter" />
+                            <RadioButton Content="➡️ Arrow" Tag="Arrow" IsChecked="True" />
+                            <RadioButton Content="📏 Line" Tag="Line" />
+                            <RadioButton Content="⬜ Rect" Tag="Rectangle" />
+                            <RadioButton Content="⭕ Ellipse" Tag="Ellipse" />
+                            <RadioButton Content="🔤 Text" Tag="Text" />
+                            <RadioButton Content="① Badge" Tag="StepBadge" />
+                            <RadioButton Content="⬛ Blur" Tag="Pixelate" />
+                        </StackPanel>
+                    </RadioButtons>
+                </StackPanel>
+
+                <!-- Color Palette & Stroke Controls -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Background="#EF4444" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#EF4444" />
+                        <Button Background="#F97316" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#F97316" />
+                        <Button Background="#EAB308" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#EAB308" />
+                        <Button Background="#22C55E" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#22C55E" />
+                        <Button Background="#3B82F6" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#3B82F6" />
+                        <Button Background="#A855F7" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#A855F7" />
+                        <Button Background="#FFFFFF" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#FFFFFF" BorderBrush="#888" BorderThickness="1" />
+                        <Button Background="#000000" Width="24" Height="24" CornerRadius="12" Click="OnColorSelected" Tag="#000000" />
+                    </StackPanel>
+
+                    <Rectangle Width="1" Height="20" Fill="{ThemeResource CardStrokeColorDefaultBrush}" />
+
+                    <!-- Undo / Redo -->
+                    <Button Click="OnUndoClicked" ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                        <FontIcon Glyph="&#xE7A7;" FontSize="14" />
+                    </Button>
+                    <Button Click="OnRedoClicked" ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                        <FontIcon Glyph="&#xE7A6;" FontSize="14" />
+                    </Button>
+                </StackPanel>
+
+                <!-- Save / Export Actions -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                    <Button Style="{ThemeResource AccentButtonStyle}" Click="OnCopyClicked">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE8C8;" FontSize="14" />
+                            <TextBlock Text="Copy to Clipboard" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="OnSaveClicked">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE74E;" FontSize="14" />
+                            <TextBlock Text="Save to File" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="OnDiscardClicked" ToolTipService.ToolTip="Discard">
+                        <FontIcon Glyph="&#xE711;" FontSize="14" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Canvas Container -->
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#111111">
+            <Canvas x:Name="DrawingCanvas" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    PointerPressed="OnCanvasPointerPressed" 
+                    PointerMoved="OnCanvasPointerMoved" 
+                    PointerReleased="OnCanvasPointerReleased">
+                <Image x:Name="BackgroundImageView" Stretch="None" />
+            </Canvas>
+        </ScrollViewer>
+    </Grid>
+</Window>

@@ -1,0 +1,177 @@
+<Page
+    x:Class="AeroCapture.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32,24,32,32">
+        <StackPanel Spacing="24" MaxWidth="800" HorizontalAlignment="Stretch">
+            
+            <!-- Page Header -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Settings" Style="{ThemeResource TitleLargeTextBlockStyle}" FontWeight="Bold" />
+                    <TextBlock Text="Configure recording encoders, output folders, and keyboard shortcuts" Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+
+                <Button Grid.Column="1" Click="OnSaveClicked" Style="{ThemeResource AccentButtonStyle}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE74E;" FontSize="14" />
+                        <TextBlock Text="Save Changes" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- Video Recording Options -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="🎥 Video Recording Settings" Style="{ThemeResource SubtitleTextBlockStyle}" FontWeight="SemiBold" />
+
+                    <Grid ColumnSpacing="16" RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Container Format -->
+                        <ComboBox x:Name="ContainerComboBox" Header="Container Format" HorizontalAlignment="Stretch" SelectedIndex="0">
+                            <ComboBoxItem Content="MP4 (MPEG-4 Part 14)" Tag="Mp4" />
+                            <ComboBoxItem Content="MKV (Matroska - Crash Resilient)" Tag="Mkv" />
+                            <ComboBoxItem Content="WebM (VP9/Opus)" Tag="WebM" />
+                            <ComboBoxItem Content="GIF (Animated Image)" Tag="Gif" />
+                        </ComboBox>
+
+                        <!-- Hardware Encoder Preference -->
+                        <ComboBox Grid.Column="1" x:Name="EncoderComboBox" Header="Video Encoder Engine" HorizontalAlignment="Stretch" SelectedIndex="0">
+                            <ComboBoxItem Content="⚡ Auto (Best Hardware Acceleration)" Tag="AutoHardware" />
+                            <ComboBoxItem Content="NVIDIA NVENC (H.264)" Tag="NvidiaNvenc" />
+                            <ComboBoxItem Content="AMD AMF (H.264)" Tag="AmdAmf" />
+                            <ComboBoxItem Content="Intel QuickSync (H.264)" Tag="IntelQsv" />
+                            <ComboBoxItem Content="Software CPU (x264)" Tag="SoftwareX264" />
+                            <ComboBoxItem Content="Software CPU HEVC (x265)" Tag="SoftwareX265" />
+                        </ComboBox>
+
+                        <!-- Framerate -->
+                        <ComboBox Grid.Row="1" Grid.Column="0" x:Name="FpsComboBox" Header="Frame Rate (FPS)" HorizontalAlignment="Stretch" SelectedIndex="2">
+                            <ComboBoxItem Content="24 FPS (Cinematic)" Tag="24" />
+                            <ComboBoxItem Content="30 FPS (Standard)" Tag="30" />
+                            <ComboBoxItem Content="60 FPS (Smooth Gaming / Motion)" Tag="60" />
+                            <ComboBoxItem Content="120 FPS (High Refresh Rate)" Tag="120" />
+                        </ComboBox>
+
+                        <!-- Bitrate -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                            <TextBlock Text="Video Bitrate: 8000 Kbps" x:Name="BitrateLabel" Style="{ThemeResource CaptionTextBlockStyle}" />
+                            <Slider x:Name="BitrateSlider" Minimum="1000" Maximum="30000" StepFrequency="500" Value="8000" ValueChanged="OnBitrateChanged" />
+                        </StackPanel>
+
+                        <!-- Cursor Options -->
+                        <ToggleSwitch Grid.Row="2" Grid.Column="0" x:Name="CaptureCursorSwitch" Header="Capture Mouse Cursor" IsOn="True" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Screenshot Settings -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="📸 Screenshot Settings" Style="{ThemeResource SubtitleTextBlockStyle}" FontWeight="SemiBold" />
+
+                    <Grid ColumnSpacing="16" RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Format -->
+                        <ComboBox x:Name="ScreenshotFormatComboBox" Header="Image Format" HorizontalAlignment="Stretch" SelectedIndex="0">
+                            <ComboBoxItem Content="PNG (Lossless with Transparency)" Tag="Png" />
+                            <ComboBoxItem Content="JPEG (Compact)" Tag="Jpeg" />
+                            <ComboBoxItem Content="WebP (Modern High Compression)" Tag="WebP" />
+                            <ComboBoxItem Content="BMP (Raw Bitmap)" Tag="Bmp" />
+                        </ComboBox>
+
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="JPEG Quality: 90%" x:Name="QualityLabel" Style="{ThemeResource CaptionTextBlockStyle}" />
+                            <Slider x:Name="QualitySlider" Minimum="20" Maximum="100" StepFrequency="5" Value="90" ValueChanged="OnQualityChanged" />
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Spacing="8">
+                        <ToggleSwitch x:Name="AutoClipboardSwitch" Header="Automatically Copy to Clipboard on Capture" IsOn="True" />
+                        <ToggleSwitch x:Name="OpenEditorSwitch" Header="Open in Annotation Studio after Capture" IsOn="True" />
+                        <ToggleSwitch x:Name="AutoSaveSwitch" Header="Automatically Save to File" IsOn="True" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Storage Folders -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
+                <StackPanel Spacing="16">
+                    <TextBlock Text="📁 Output Folders" Style="{ThemeResource SubtitleTextBlockStyle}" FontWeight="SemiBold" />
+
+                    <TextBox x:Name="RecordingsDirBox" Header="Recordings Output Directory" />
+                    <TextBox x:Name="ScreenshotsDirBox" Header="Screenshots Output Directory" />
+                </StackPanel>
+            </Border>
+
+            <!-- Global Keyboard Shortcuts Reference -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="⌨️ Global Hotkeys" Style="{ThemeResource SubtitleTextBlockStyle}" FontWeight="SemiBold" />
+
+                    <Grid RowSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Capture Region Screenshot" VerticalAlignment="Center" />
+                        <Border Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="PrintScreen" FontWeight="SemiBold" />
+                        </Border>
+
+                        <TextBlock Grid.Row="1" Text="Capture Full Screen Screenshot" VerticalAlignment="Center" />
+                        <Border Grid.Row="1" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="Ctrl + PrintScreen" FontWeight="SemiBold" />
+                        </Border>
+
+                        <TextBlock Grid.Row="2" Text="Capture Active Window Screenshot" VerticalAlignment="Center" />
+                        <Border Grid.Row="2" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="Alt + PrintScreen" FontWeight="SemiBold" />
+                        </Border>
+
+                        <TextBlock Grid.Row="3" Text="Start / Stop Screen Recording" VerticalAlignment="Center" />
+                        <Border Grid.Row="3" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="Ctrl + Shift + R" FontWeight="SemiBold" />
+                        </Border>
+
+                        <TextBlock Grid.Row="4" Text="Pause / Resume Screen Recording" VerticalAlignment="Center" />
+                        <Border Grid.Row="4" Grid.Column="1" Background="{ThemeResource SystemAccentColorLight3}" CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="Ctrl + Shift + P" FontWeight="SemiBold" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

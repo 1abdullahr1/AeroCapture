@@ -1,0 +1,141 @@
+name: Build & Package AeroCapture Installer
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Installer & Portable Package
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup -y --no-progress
+
+      - name: Download & Extract Static FFmpeg
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "temp_ffmpeg" | Out-Null
+          New-Item -ItemType Directory -Force -Path "dist\app\ffmpeg" | Out-Null
+          
+          $urls = @(
+              "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip",
+              "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+          )
+          
+          $downloaded = $false
+          $zipPath = "temp_ffmpeg\ffmpeg.zip"
+
+          foreach ($url in $urls) {
+              try {
+                  Write-Host "Attempting download from: $url"
+                  Invoke-WebRequest -Uri $url -OutFile $zipPath -UserAgent "AeroCapture-CI" -TimeoutSec 300
+                  $downloaded = $true
+                  Write-Host "Download successful!"
+                  break
+              } catch {
+                  Write-Warning "Failed to download from $url : $_"
+              }
+          }
+
+          if (-not $downloaded) {
+              Write-Error "Could not download FFmpeg from any source."
+              exit 1
+          }
+
+          Write-Host "Extracting FFmpeg..."
+          Expand-Archive -Path $zipPath -DestinationPath "temp_ffmpeg\extracted" -Force
+          
+          $ffmpegExe = Get-ChildItem -Path "temp_ffmpeg\extracted" -Filter "ffmpeg.exe" -Recurse | Select-Object -First 1
+          if ($ffmpegExe) {
+              Copy-Item $ffmpegExe.FullName -Destination "dist\app\ffmpeg\ffmpeg.exe" -Force
+              Write-Host "FFmpeg successfully copied to dist\app\ffmpeg\ffmpeg.exe"
+          } else {
+              Write-Error "Failed to locate ffmpeg.exe in extracted archive!"
+              exit 1
+          }
+
+      - name: Publish WinUI 3 Unpackaged Application (Self-Contained x64)
+        shell: pwsh
+        run: |
+          dotnet publish src/AeroCapture/AeroCapture.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:WindowsPackageType=None `
+            -p:PublishReadyToRun=false `
+            -o dist/app
+
+      - name: Verify FFmpeg in Output Directory
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "dist\app\ffmpeg\ffmpeg.exe")) {
+              Write-Host "Re-ensuring FFmpeg in published bundle..."
+              New-Item -ItemType Directory -Force -Path "dist\app\ffmpeg" | Out-Null
+              $ffmpegExe = Get-ChildItem -Path "temp_ffmpeg\extracted" -Filter "ffmpeg.exe" -Recurse | Select-Object -First 1
+              Copy-Item $ffmpegExe.FullName -Destination "dist\app\ffmpeg\ffmpeg.exe" -Force
+          }
+          Write-Host "Bundle contents verified."
+
+      - name: Compile Inno Setup Windows Installer
+        shell: pwsh
+        run: |
+          $version = "1.0.0"
+          if ($env:GITHUB_REF -like "refs/tags/v*") {
+              $version = $env:GITHUB_REF.Substring(11)
+          }
+
+          New-Item -ItemType Directory -Force -Path "dist\installer" | Out-Null
+          
+          Write-Host "Compiling installer for version $version..."
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" `
+            "/DAppVersion=$version" `
+            "/DSourceDir=dist\app" `
+            "/DOutputDir=dist\installer" `
+            installer\setup.iss
+
+      - name: Package Portable ZIP Release
+        shell: pwsh
+        run: |
+          $version = "1.0.0"
+          if ($env:GITHUB_REF -like "refs/tags/v*") {
+              $version = $env:GITHUB_REF.Substring(11)
+          }
+          Compress-Archive -Path "dist\app\*" -DestinationPath "dist\installer\AeroCapture-Portable-v$version-win-x64.zip" -Force
+          Write-Host "Artifacts generated in dist\installer:"
+          Get-ChildItem "dist\installer"
+
+      - name: Upload Installer Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: AeroCapture-Windows-Installer
+          path: dist/installer/*
+          retention-days: 30
+
+      - name: Create GitHub Release (On Tag Push)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/installer/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
