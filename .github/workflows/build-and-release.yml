@@ -112,13 +112,16 @@ jobs:
               $version = $env:GITHUB_REF.Substring(11)
           }
 
-          New-Item -ItemType Directory -Force -Path "dist\installer" | Out-Null
+          $repoRoot = (Get-Item .).FullName
+          $sourceDir = Join-Path $repoRoot "dist\app"
+          $outputDir = Join-Path $repoRoot "dist\installer"
+          New-Item -ItemType Directory -Force -Path $outputDir | Out-Null
           
           Write-Host "Compiling installer for version $version..."
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" `
             "/DAppVersion=$version" `
-            "/DSourceDir=dist\app" `
-            "/DOutputDir=dist\installer" `
+            "/DSourceDir=$sourceDir" `
+            "/DOutputDir=$outputDir" `
             installer\setup.iss
 
       - name: Package Portable ZIP Release
