@@ -113,10 +113,11 @@ jobs:
               Write-Host "Copying $($_.FullName) to $appDir\$($_.Name)"
               Copy-Item $_.FullName -Destination "$appDir\$($_.Name)" -Force
           }
-          if (Test-Path "$appDir\resources.pri" -and -not (Test-Path "$appDir\AeroCapture.pri")) {
+          if ((Test-Path "$appDir\resources.pri") -and (-not (Test-Path "$appDir\AeroCapture.pri"))) {
               Copy-Item "$appDir\resources.pri" -Destination "$appDir\AeroCapture.pri" -Force
               Write-Host "Created AeroCapture.pri from resources.pri"
-          } elseif (Test-Path "$appDir\AeroCapture.pri" -and -not (Test-Path "$appDir\resources.pri")) {
+          }
+          if ((Test-Path "$appDir\AeroCapture.pri") -and (-not (Test-Path "$appDir\resources.pri"))) {
               Copy-Item "$appDir\AeroCapture.pri" -Destination "$appDir\resources.pri" -Force
               Write-Host "Created resources.pri from AeroCapture.pri"
           }
